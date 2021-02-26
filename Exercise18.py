@@ -40,16 +40,13 @@ main(text)
 
 print("--------advanced---------")
 
+import numpy as np
+import math
+
 text = '''Humpty Dumpty sat on a wall
 Humpty Dumpty had a great fall
 all the king's horses and all the king's men
 couldn't put Humpty together again'''
-
-def distance(row1, row2):
-    sum = 0
-    for a, b in zip(row1, row2):
-        sum += abs(a-b)
-    return sum
 
 def main(text):
     # tasks your code should perform:
@@ -72,11 +69,10 @@ def main(text):
     # 3. after you have your term frequencies and document frequencies, go over each line in the text and 
     # calculate its TF-IDF representation, which will be a vecto
     for doc_index, doc in enumerate(docs):
-        tfidf = np.empty((N, len(vocabulary)), dtype=np.float)
+        tfidf = np.zeros((N, n), dtype=np.float)
         for word_index, word in enumerate(vocabulary):
             tfidf[doc_index,word_index] = tf[word][doc_index] * math.log(1/df[word] , 10)
-    
-    
+       
     # 4. after you have calculated the TF-IDF representations for each line in the text, you need to
     # calculate the distances between each line to find which are the closest.
     dist = np.empty((N, N), dtype=np.float)
@@ -85,7 +81,7 @@ def main(text):
             if i == j:
                 dist[i,j] = np.Inf
             else:
-                dist[i, j] =  distance(row1 , row2)
+                dist[i, j] =  np.sum(abs(row1 - row2))
     print(np.unravel_index(np.argmin(dist), dist.shape))
 
 main(text)
